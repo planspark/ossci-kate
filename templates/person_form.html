@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- BEGIN person_form.html -->
+<h1>{{ form_title }}</h1>
+<form action="{{ form_action }}" method="POST">
+  <label>Name:</label>
+  <input type="text" name="name" value="{{ person.name if person else '' }}" required>
+  <label>Description:</label>
+  <textarea name="description">{{ person.description if person else '' }}</textarea>
+  <label>URL:</label>
+  <input type="text" name="url" value="{{ person.url if person else '' }}">
+  <button type="submit">Save</button>
+</form>
+<!-- END person_form.html -->
+{% endblock %}

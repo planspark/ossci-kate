@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- BEGIN article_detail.html -->
+<h1>Research Paper Details</h1>
+<p><strong>Title:</strong> {{ article.title }}</p>
+<p><strong>Description:</strong> {{ article.description }}</p>
+<p><strong>URL:</strong> <a href="{{ article.url }}">{{ article.url }}</a></p>
+
+<p>
+  <a href="{{ url_for('articles') }}">Back to list of research papers</a> |
+  <a href="{{ url_for('index') }}">Back to homepage</a>
+</p>
+<!-- END article_detail.html -->
+{% endblock %}

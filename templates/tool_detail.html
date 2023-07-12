@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- BEGIN tool_detail.html -->
+<h1>Tool Details</h1>
+<p><strong>Name:</strong> {{ tool.name }}</p>
+<p><strong>Description:</strong> {{ tool.description }}</p>
+<p><strong>URL:</strong> <a href="{{ tool.url }}">{{ tool.url }}</a></p>
+
+<p>
+  <a href="{{ url_for('tools') }}">Back to tools list</a> |
+  <a href="{{ url_for('index') }}">Back to homepage</a>
+</p>
+<!-- END tool_detail.html -->
+{% endblock %}

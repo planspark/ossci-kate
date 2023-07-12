@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- BEGIN users.html -->
+<h1>List of MOSS Contributors</h1>
+<ul>
+  {% for user in users %}
+    <li><a href="{{ url_for('user_detail', user_id=user.id) }}">{{ user.name }}</a></li>
+  {% endfor %}
+</ul>
+<!-- END users.html -->
+{% endblock %}

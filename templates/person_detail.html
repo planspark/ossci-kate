@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- BEGIN person_detail.html -->
+<h1>Person Details</h1>
+<p><strong>Name:</strong> {{ person.name }}</p>
+<p><strong>Description:</strong> {{ person.description }}</p>
+<p><strong>URL:</strong> <a href="{{ person.url }}">{{ person.url }}</a></p>
+
+<p>
+  <a href="{{ url_for('persons') }}">Back to list of people</a> |
+  <a href="{{ url_for('index') }}">Back to homepage</a>
+</p>
+<!-- END person_detail.html -->
+{% endblock %}

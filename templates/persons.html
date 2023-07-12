@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- BEGIN persons.html -->
+<h1>List of People</h1>
+<ul>
+  {% for person in persons %}
+    <li><a href="{{ url_for('person_detail', person_id=person.id) }}">{{ person.name }}</a></li>
+  {% endfor %}
+</ul>
+
+  <p>
+    <a href="{{ url_for('add_person') }}">Add Person</a>
+  </p>
+
+  <p>
+    <a href="{{ url_for('index') }}">Back to homepage</a>
+  </p>
+
+<!-- END persons.html -->
+{% endblock %}

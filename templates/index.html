@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- BEGIN index.html -->
+<h1>Welcome to KATE!</h1>
+<p>KATE is a pre-prototype for Map of Open-Source Science (MOSS), a new interface that lets you browse and manage science-related OSS tools, published research papers, and the people behind them.</p>
+<p>Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to access the full functionality.</p>
+<p>Explore the available entities:</p>
+<ul>
+  <li><a href="{{ url_for('tools') }}">Tools</a></li>
+  <li><a href="{{ url_for('articles') }}">Papers</a></li>
+  <li><a href="{{ url_for('persons') }}">People</a></li>
+</ul>
+<!-- END index.html -->
+{% endblock %}

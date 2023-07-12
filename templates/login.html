@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- BEGIN login.html -->
+<h1>Login</h1>
+<form action="{{ url_for('login') }}" method="POST">
+  <label>Email:</label>
+  <input type="email" name="email" required>
+  <label>Password:</label>
+  <input type="password" name="password" required>
+  <button type="submit">Login</button>
+</form>
+{% if error %}
+  <p>Login failed. Please check your credentials.</p>
+{% endif %}
+<!-- END login.html -->
+{% endblock %}

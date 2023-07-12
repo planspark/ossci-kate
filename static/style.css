@@ -1,0 +1,87 @@
+/* static/style.css */
+
+/* Body and form container */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Form fields */
+.form-container label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.form-container input[type="text"],
+.form-container textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Submit button */
+.form-container input[type="submit"] {
+  background-color: #4caf50;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.form-container input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Header */
+.header {
+  background-color: #92c8f7;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-left {
+  align-self: flex-start;
+}
+
+.header-right {
+  align-self: flex-end;
+}
+
+/* Content */
+.content {
+  background-color: #f5f5f5;
+  padding: 10px;
+  margin-top: 0;
+}
+
+/* Footer */
+.footer {
+  background-color: #92c8f7;
+  padding: 10px;
+  margin-top: auto;
+}
+
+/* Ensure full height */
+html, body {
+  height: 100%;
+}

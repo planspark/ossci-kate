@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- BEGIN tools.html -->
+  <h1>List of Tools</h1>
+  <ul>
+    {% for tool in tools %}
+      <li><a href="{{ url_for('tool_detail', tool_id=tool.id) }}">{{ tool.name }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <p>
+    <a href="{{ url_for('add_tool') }}">Add Tool</a>
+  </p>
+
+  <p>
+    <a href="{{ url_for('index') }}">Back to homepage</a>
+  </p>
+<!-- END tools.html -->
+{% endblock %}
