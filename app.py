@@ -41,22 +41,13 @@ class User(UserMixin, db.Model):
     bio = db.Column(db.String(500))
     url = db.Column(db.String(200))
 
-
-# Tool model
-class Tool(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    description = db.Column(db.String(500))
-    url = db.Column(db.String(200))
-
-
-# Article model
-class Article(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120), nullable=False)
-    description = db.Column(db.String(500))
-    url = db.Column(db.String(200))
-
+# Intermediate table for many-to-many relationship between Persons, Articles, and Tools
+person_article_tool = db.Table(
+    'person_article_tool',
+    db.Column('person_id', db.Integer, db.ForeignKey('person.id'), primary_key=True),
+    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
+    db.Column('tool_id', db.Integer, db.ForeignKey('tool.id'), primary_key=True)
+)
 
 # Person model
 class Person(db.Model):
@@ -64,6 +55,26 @@ class Person(db.Model):
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(500))
     url = db.Column(db.String(200))
+    articles = db.relationship('Article', secondary=person_article_tool, backref='persons')
+    tools = db.relationship('Tool', secondary=person_article_tool, backref='persons')
+
+# Article model
+class Article(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.String(500))
+    url = db.Column(db.String(200))
+    persons = db.relationship('Person', secondary=person_article_tool, backref='articles')
+    tools = db.relationship('Tool', secondary=person_article_tool, backref='articles')
+
+# Tool model
+class Tool(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.String(500))
+    url = db.Column(db.String(200))
+    persons = db.relationship('Person', secondary=person_article_tool, backref='tools')
+    articles = db.relationship('Article', secondary=person_article_tool, backref='tools')
 
 
 # Login manager callback to load user
