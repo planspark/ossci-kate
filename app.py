@@ -40,42 +40,43 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(120))
     bio = db.Column(db.String(500))
     url = db.Column(db.String(200))
+    
+# Define the association class for the many-to-many relationships between Person, Tool, and Article
+class PersonToolArticleAssociation(db.Model):
+    __tablename__ = 'person_tool_article_association'
+    person_id = db.Column(db.Integer, db.ForeignKey('person.id'), primary_key=True)
+    tool_id = db.Column(db.Integer, db.ForeignKey('tool.id'), primary_key=True)
+    article_id = db.Column(db.Integer, db.ForeignKey('article.id'), primary_key=True)
+    person = db.relationship('Person', backref=db.backref('tool_article', cascade='all, delete-orphan'))
+    tool = db.relationship('Tool', backref=db.backref('person_article', cascade='all, delete-orphan'))
+    article = db.relationship('Article', backref=db.backref('person_tool', cascade='all, delete-orphan'))
 
-# Intermediate table for many-to-many relationship between Persons, Articles, and Tools
-person_article_tool = db.Table(
-    'person_article_tool',
-    db.Column('person_id', db.Integer, db.ForeignKey('person.id'), primary_key=True),
-    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
-    db.Column('tool_id', db.Integer, db.ForeignKey('tool.id'), primary_key=True)
-)
-
-# Person model
+# Define the Person model
 class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(500))
     url = db.Column(db.String(200))
-    articles = db.relationship('Article', secondary=person_article_tool, backref='persons')
-    tools = db.relationship('Tool', secondary=person_article_tool, backref='persons')
+    tools = db.relationship('PersonToolArticleAssociation', lazy=True)
+    articles = db.relationship('PersonToolArticleAssociation', lazy=True)
 
-# Article model
+# Define the Article model
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(500))
     url = db.Column(db.String(200))
-    persons = db.relationship('Person', secondary=person_article_tool, backref='articles')
-    tools = db.relationship('Tool', secondary=person_article_tool, backref='articles')
+    people = db.relationship('PersonToolArticleAssociation', lazy=True)
+    tools = db.relationship('PersonToolArticleAssociation', lazy=True)
 
-# Tool model
+# Define the Tool model
 class Tool(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(500))
     url = db.Column(db.String(200))
-    persons = db.relationship('Person', secondary=person_article_tool, backref='tools')
-    articles = db.relationship('Article', secondary=person_article_tool, backref='tools')
-
+    people = db.relationship('PersonToolArticleAssociation', lazy=True)
+    articles = db.relationship('PersonToolArticleAssociation', lazy=True)
 
 # Login manager callback to load user
 @login_manager.user_loader
