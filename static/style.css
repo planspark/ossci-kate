@@ -6,7 +6,7 @@ body {
   background-color: #f5f5f5;
   margin: 0;
   padding: 0;
-  min-height: 100%;
+  min-height: 100vh; /* Change min-height to viewport height */
   display: flex;
   flex-direction: column;
 }
@@ -73,6 +73,7 @@ body {
   background-color: #f5f5f5;
   padding-left: 90px;
   margin-top: 30px;
+  flex: 1; /* Add flex: 1 to make it fill remaining vertical space */
 }
 
 /* Footer */
