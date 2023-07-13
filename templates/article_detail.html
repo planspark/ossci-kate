@@ -7,6 +7,8 @@
 <p><strong>Description:</strong> {{ article.description }}</p>
 <p><strong>URL:</strong> <a href="{{ article.url }}">{{ article.url }}</a></p>
 
+<p>(<a href="">edit</a>)</p>
+
 <h2>Authors:</h2>
 <ul>
     {% for author in article.persons %}

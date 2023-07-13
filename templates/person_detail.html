@@ -6,6 +6,9 @@
 <p><strong>Name:</strong> {{ person.name }}</p>
 <p><strong>Description:</strong> {{ person.description }}</p>
 <p><strong>URL:</strong> <a href="{{ person.url }}">{{ person.url }}</a></p>
+
+<p>(<a href="">edit</a>)</p>
+
 <h2>Packages:</h2>
 <ul>
     {% for package in person.packages %}
