@@ -322,22 +322,8 @@ def associate_person_paper():
 
             paper_person = PaperPerPerson(person_id=person_id, article_id=article_id)
             db.session.add(paper_person)
-
-            # Association between person and paper added
-            # Now, check if the paper is associated with any packages
-            packages = Tool.query.filter_by(article_id=article_id).all()
-
-            if packages:
-                for package in packages:
-                    existing_association = PackagesPerPaper.query.filter_by(tool_id=package.id, article_id=article_id).first()
-
-                    if not existing_association:
-                        package_paper = PackagesPerPaper(tool_id=package.id, article_id=article_id)
-                        db.session.add(package_paper)
-
             db.session.commit()
-
-            return render_template('person_detail.html', person=person)
+            return render_template('article_detail.html', person=person)
 
     persons = Person.query.all()
     articles = Article.query.all()
@@ -361,22 +347,8 @@ def associate_paper_package():
 
             package_paper = PackagesPerPaper(article_id=article_id, tool_id=tool_id)
             db.session.add(package_paper)
-
-            # Association between paper and package added
-            # Now, check if the package is associated with any persons
-            persons = Person.query.filter(Person.papers.any(article_id=article_id)).all()
-
-            if persons:
-                for person in persons:
-                    existing_association = PackagesPerPerson.query.filter_by(tool_id=tool_id, person_id=person.id).first()
-
-                    if not existing_association:
-                        package_person = PackagesPerPerson(tool_id=tool_id, person_id=person.id)
-                        db.session.add(package_person)
-
             db.session.commit()
-
-            return render_template('article_detail.html', article=article)
+            return render_template('tool_detail.html', article=article)
 
     articles = Article.query.all()
     tools = Tool.query.all()
