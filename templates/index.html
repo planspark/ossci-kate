@@ -3,11 +3,10 @@
 {% block content %}
 <!-- BEGIN index.html -->
 <h1>Welcome to Map of Open-Source Science (MOSS)!</h1>
-<p>You are looking at a pre-prototype for Map of Open-Source Science (MOSS), a new interface that lets you explore science-related OSS tools, the associated published research papers, and the people behind both.</p>
+<p>You are looking at a pre-prototype for Map of Open-Source Science (MOSS), a new interface that lets you explore science-related OSS tools, the associated published research papers, and the people behind both. <a href="https://opensource.science/how-to-get-involved-in-ossci-be4f9d0b2c3d">Follow Open-Source Science (OSSci)</a> and be the first to know when we launch. Thanks!</p>
 {% if not current_user.is_authenticated %}
     <p>Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to access the full functionality.</p>
 {% endif %}
-<p>Please <a href="https://opensource.science/how-to-get-involved-in-ossci-be4f9d0b2c3d">follow Open-Source Science (OSSci)</a> and be the first to know when we launch. Thanks!</p>
 
 <iframe src="https://embed.kumu.io/ca246ae85225bb79bd2453d9ae3772ea" width="100%" height="480" frameborder="0"></iframe>
 
