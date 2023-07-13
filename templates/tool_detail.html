@@ -16,7 +16,7 @@
     {% endfor %}
 </ul>
 
-<p>(<a href="">add maintainer/contributor</a>)</p>
+<p><a href="{{ url_for('associate_person_package') }}">add maintainer/contributor</a></p>
 
 <h2>Papers:</h2>
 <ul>
@@ -25,7 +25,7 @@
     {% endfor %}
 </ul>
 
-<p>(<a href="">add paper</a>)</p>
+<p><a href="{{ url_for('associate_paper_package') }}">add paper</a></p>
 
 <p>
   <a href="{{ url_for('tools') }}">Back to tools list</a> |

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Associate Person and Paper</h1>
+<form action="/associate-person-paper" method="POST">
+<label for="person-id">Person:</label>
+<select id="person-id" name="person-id">
+    {% for person in persons %}
+    <option value="{{ person.id }}">{{ person.name }}</option>
+    {% endfor %}
+</select>
+
+<label for="article-id">Paper:</label>
+<select id="article-id" name="article-id">
+    {% for article in articles %}
+    <option value="{{ article.id }}">{{ article.title }}</option>
+    {% endfor %}
+</select>
+
+<button type="submit">Associate Person and Paper</button>
+</form>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Associate Person and Package</h1>
+<form action="/associate-person-package" method="POST">
+  <label for="person-id">Person:</label>
+  <select id="person-id" name="person-id">
+    {% for person in persons %}
+    <option value="{{ person.id }}">{{ person.name }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="tool-id">Package:</label>
+  <select id="tool-id" name="tool-id">
+    {% for tool in tools %}
+    <option value="{{ tool.id }}">{{ tool.name }}</option>
+    {% endfor %}
+  </select>
+
+  <input type="submit">
+</form>
+{% endblock %}

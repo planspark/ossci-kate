@@ -280,6 +280,109 @@ def users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
+@app.route('/associate-person-package', methods=['GET', 'POST'])
+def associate_person_package():
+    if request.method == 'POST':
+        person_id = request.form.get('person-id')
+        tool_id = request.form.get('tool-id')
+
+        person = Person.query.get(person_id)
+        tool = Tool.query.get(tool_id)
+
+        if person and tool:
+            existing_association = PackagesPerPerson.query.filter_by(person_id=person_id, tool_id=tool_id).first()
+
+            if existing_association:
+                return "Error: Package is already associated with the person"
+
+            package_person = PackagesPerPerson(person_id=person_id, tool_id=tool_id)
+            db.session.add(package_person)
+            db.session.commit()
+            return render_template('person_detail.html', person=person)
+
+    persons = Person.query.all()
+    tools = Tool.query.all()
+
+    return render_template('associate_person_package.html', persons=persons, tools=tools)
+
+@app.route('/associate-person-paper', methods=['GET', 'POST'])
+def associate_person_paper():
+    if request.method == 'POST':
+        person_id = request.form.get('person-id')
+        article_id = request.form.get('article-id')
+
+        person = Person.query.get(person_id)
+        article = Article.query.get(article_id)
+
+        if person and article:
+            existing_association = PaperPerPerson.query.filter_by(person_id=person_id, article_id=article_id).first()
+
+            if existing_association:
+                return "Error: Person is already associated with the paper"
+
+            paper_person = PaperPerPerson(person_id=person_id, article_id=article_id)
+            db.session.add(paper_person)
+
+            # Association between person and paper added
+            # Now, check if the paper is associated with any packages
+            packages = Tool.query.filter_by(article_id=article_id).all()
+
+            if packages:
+                for package in packages:
+                    existing_association = PackagesPerPaper.query.filter_by(tool_id=package.id, article_id=article_id).first()
+
+                    if not existing_association:
+                        package_paper = PackagesPerPaper(tool_id=package.id, article_id=article_id)
+                        db.session.add(package_paper)
+
+            db.session.commit()
+
+            return render_template('person_detail.html', person=person)
+
+    persons = Person.query.all()
+    articles = Article.query.all()
+
+    return render_template('associate_person_paper.html', persons=persons, articles=articles)
+
+@app.route('/associate-paper-package', methods=['GET', 'POST'])
+def associate_paper_package():
+    if request.method == 'POST':
+        article_id = request.form.get('article-id')
+        tool_id = request.form.get('tool-id')
+
+        article = Article.query.get(article_id)
+        tool = Tool.query.get(tool_id)
+
+        if article and tool:
+            existing_association = PackagesPerPaper.query.filter_by(article_id=article_id, tool_id=tool_id).first()
+
+            if existing_association:
+                return "Error: Package is already associated with the paper"
+
+            package_paper = PackagesPerPaper(article_id=article_id, tool_id=tool_id)
+            db.session.add(package_paper)
+
+            # Association between paper and package added
+            # Now, check if the package is associated with any persons
+            persons = Person.query.filter(Person.papers.any(article_id=article_id)).all()
+
+            if persons:
+                for person in persons:
+                    existing_association = PackagesPerPerson.query.filter_by(tool_id=tool_id, person_id=person.id).first()
+
+                    if not existing_association:
+                        package_person = PackagesPerPerson(tool_id=tool_id, person_id=person.id)
+                        db.session.add(package_person)
+
+            db.session.commit()
+
+            return render_template('article_detail.html', article=article)
+
+    articles = Article.query.all()
+    tools = Tool.query.all()
+
+    return render_template('associate_paper_package.html', articles=articles, tools=tools)
+
 @app.route('/populate-database')
 def populate_database():
     # Create some User instances

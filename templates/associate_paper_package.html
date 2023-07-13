@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Associate Paper and Package</h1>
+<form action="/associate-paper-package" method="POST">
+<label for="article-id">Paper:</label>
+<select id="article-id" name="article-id">
+    {% for article in articles %}
+    <option value="{{ article.id }}">{{ article.title }}</option>
+    {% endfor %}
+</select>
+
+<label for="tool-id">Package:</label>
+<select id="tool-id" name="tool-id">
+    {% for tool in tools %}
+    <option value="{{ tool.id }}">{{ tool.name }}</option>
+    {% endfor %}
+</select>
+
+<button type="submit">Associate Paper and Package</button>
+</form>
+{% endblock %}
