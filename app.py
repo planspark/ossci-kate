@@ -80,8 +80,6 @@ class PaperPerPerson(db.Model):
     article_id = db.Column(db.Integer, ForeignKey('articles.id'), primary_key=True)
     article = relationship("Article", back_populates="persons")
     person = relationship("Person", back_populates="papers")
-    def __repr__(self):
-        return f'<Papers "{self.article}">'
 
 class PackagesPerPaper(db.Model):
     __tablename__ = 'packages_paper'
@@ -185,7 +183,7 @@ def add_tool():
         url = request.form.get('url')
 
         # Create a new tool and add it to the database
-        new_tool = Tool(name=name, description=description, url=url)
+        new_tool = Tool(name=name, description=description, url=url, persons=[], articles=[])
         db.session.add(new_tool)
         db.session.commit()
 
@@ -215,7 +213,7 @@ def add_article():
         url = request.form.get('url')
 
         # Create a new article and add it to the database
-        new_article = Article(title=title, description=description, url=url)
+        new_article = Article(title=title, description=description, url=url, packages=[], persons=[])
         db.session.add(new_article)
         db.session.commit()
 
@@ -245,7 +243,7 @@ def add_person():
         url = request.form.get('url')
 
         # Create a new person and add it to the database
-        new_person = Person(name=name, description=description, url=url)
+        new_person = Person(name=name, description=description, url=url, packages=[], papers=[])
         db.session.add(new_person)
         db.session.commit()
 
@@ -253,6 +251,23 @@ def add_person():
 
     return render_template('person_form.html')
 
+@app.route('/edit-person/<int:person_id>', methods=['GET', 'POST'])
+def edit_person(person_id):
+    person = Person.query.get(person_id)
+    
+    if not person:
+        return "Person not found"
+
+    if request.method == 'POST':
+        person.name = request.form.get('name')
+        person.description = request.form.get('description')
+        person.url = request.form.get('url')
+
+        db.session.commit()
+
+        return redirect('/')  # Redirect to the appropriate page after saving changes
+
+    return render_template('person_edit.html', person=person)
 
 @app.route('/persons/<int:person_id>')
 def person_detail(person_id):

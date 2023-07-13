@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Person</title>
+  <style>
+    /* Add your CSS styles here */
+    /* For example: 
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+      font-size: 24px;
+    }
+    form {
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    button[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Edit Person</h1>
+  <form action="{{ url_for('edit_person', person_id=person.id) }}" method="POST">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="{{ person.name }}" required>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="4" required>{{ person.description }}</textarea>
+
+    <label for="url">URL:</label>
+    <input type="text" id="url" name="url" value="{{ person.url }}">
+
+    <button type="submit">Save Changes</button>
+  </form>
+</body>
+</html>
