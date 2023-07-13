@@ -2,8 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Table, Column, Integer, ForeignKey
 import sqlalchemy as sa
+from sqlalchemy.orm import relationship
 import os
+from sqlalchemy.ext.declarative import declarative_base
+Base = declarative_base()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'  # Change this to a strong secret key
@@ -31,53 +35,59 @@ else:
 def inject_current_user():
     return dict(current_user=current_user)
 
-
-# User model
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
-    name = db.Column(db.String(120))
-    bio = db.Column(db.String(500))
-    url = db.Column(db.String(200))
-    
-# Define the association class for the many-to-many relationships between Person, Tool, and Article
-class PersonToolArticleAssociation(db.Model):
-    __tablename__ = 'person_tool_article_association'
-    person_id = db.Column(db.Integer, db.ForeignKey('person.id'), primary_key=True)
-    tool_id = db.Column(db.Integer, db.ForeignKey('tool.id'), primary_key=True)
-    article_id = db.Column(db.Integer, db.ForeignKey('article.id'), primary_key=True)
-    person = db.relationship('Person', backref=db.backref('tool_article', cascade='all, delete-orphan'))
-    tool = db.relationship('Tool', backref=db.backref('person_article', cascade='all, delete-orphan'))
-    article = db.relationship('Article', backref=db.backref('person_tool', cascade='all, delete-orphan'))
-
 # Define the Person model
 class Person(db.Model):
+    __tablename__ = 'persons'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(500))
     url = db.Column(db.String(200))
-    tools = db.relationship('PersonToolArticleAssociation', lazy=True)
-    articles = db.relationship('PersonToolArticleAssociation', lazy=True)
+    packages = relationship("PackagesPerPerson", back_populates="person")
+    papers = relationship("PaperPerPerson", back_populates="person")
 
 # Define the Article model
 class Article(db.Model):
+    __tablename__ = 'articles'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(500))
     url = db.Column(db.String(200))
-    people = db.relationship('PersonToolArticleAssociation', lazy=True)
-    tools = db.relationship('PersonToolArticleAssociation', lazy=True)
+    packages = relationship("PackagesPerPaper", back_populates="article")
+    persons = relationship("PaperPerPerson", back_populates="article")
 
 # Define the Tool model
 class Tool(db.Model):
+    __tablename__ = 'tools'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(500))
     url = db.Column(db.String(200))
-    people = db.relationship('PersonToolArticleAssociation', lazy=True)
-    articles = db.relationship('PersonToolArticleAssociation', lazy=True)
+    persons = relationship("PackagesPerPerson", back_populates="tool")
+    articles = relationship("PackagesPerPaper", back_populates="tool")
 
+class PaperPerPerson(db.Model):
+    __tablename__ = 'authors'
+    person_id = db.Column(db.Integer, ForeignKey('persons.id'), primary_key=True)
+    article_id = db.Column(db.Integer, ForeignKey('articles.id'), primary_key=True)
+    article = relationship("Article", back_populates="persons")
+    person = relationship("Person", back_populates="papers")
+    def __repr__(self):
+        return f'<Papers "{self.article}">'
+
+class PackagesPerPaper(db.Model):
+    __tablename__ = 'packages_paper'
+    tool_id = db.Column(db.Integer, ForeignKey('tools.id'), primary_key=True)
+    article_id = db.Column(db.Integer, ForeignKey('articles.id'), primary_key=True)
+    article = relationship("Article", back_populates="packages")
+    tool = relationship("Tool", back_populates="articles")
+
+class PackagesPerPerson(db.Model):
+    __tablename__ = 'packages_person'
+    person_id = db.Column(db.Integer, ForeignKey('persons.id'), primary_key=True)
+    tool_id = db.Column(db.Integer, ForeignKey('tools.id'), primary_key=True)
+    tool = relationship("Tool", back_populates="persons")
+    person = relationship("Person", back_populates="packages")
+    
 # Login manager callback to load user
 @login_manager.user_loader
 def load_user(user_id):
@@ -243,6 +253,39 @@ def users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
+@app.route('/populate-database')
+def populate_database():
+    # Create some User instances
+
+    # Create some Tool instances
+    tool1 = Tool(name='CVXPY', description='Optimization', url='https://tool1.com')
+    tool2 = Tool(name='GeoSpatial', description='Geological Package', url='https://tool2.com')
+
+    # Create some Person instances
+    person1 = Person(name='Tim', description='IBM Researcher', url='https://person1.com')
+    person2 = Person(name='Alexy', description='IBM Kate MOSS', url='https://person2.com')
+
+    # Create some Article instances
+    article1 = Article(title='Another python paper', description='Description for Article 1', url='https://article1.com')
+    article2 = Article(title='Modeling framework using CVXPY', description='Description for Article 2', url='https://article2.com')
+
+    # Associate the instances
+    package1 = PackagesPerPerson(person=person1, tool=tool1)
+    package2 = PackagesPerPerson(person=person2, tool=tool2)
+    paper1 = PaperPerPerson(person=person1, article=article1)
+    paper2 = PaperPerPerson(person=person2, article=article2)
+    package_paper1 = PackagesPerPaper(article=article1, tool=tool1)
+    package_paper2 = PackagesPerPaper(article=article2, tool=tool2)
+
+    # Add instances to the session
+    db.session.add_all([tool1, tool2, person1, person2, article1, article2,
+                        package1, package2, paper1, paper2, package_paper1, package_paper2])
+
+    # Commit the session to persist the changes
+    db.session.commit()
+
+    return 'Database populated successfully!'
+
 def configure_logging(app):
     # Logging Configuration
     if app.config['LOG_WITH_GUNICORN']:
@@ -263,8 +306,11 @@ def configure_logging(app):
 
     app.logger.info('Starting the Flask User Management App...')
 
-
+# push context manually to app
+with app.app_context():
+    db.create_all()
+    
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
+        print('Creating database tables...')
     app.run(debug=True)

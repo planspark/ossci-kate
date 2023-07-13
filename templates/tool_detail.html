@@ -7,9 +7,24 @@
 <p><strong>Description:</strong> {{ tool.description }}</p>
 <p><strong>URL:</strong> <a href="{{ tool.url }}">{{ tool.url }}</a></p>
 
+<h2>Persons:</h2>
+<ul>
+    {% for person in tool.persons %}
+        <li>{{ person.person.name }} - {{ person.person.description }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Papers:</h2>
+<ul>
+    {% for paper in tool.articles %}
+        <li>{{ paper.article.title }} - {{ paper.article.description }}</li>
+    {% endfor %}
+</ul>
+
 <p>
   <a href="{{ url_for('tools') }}">Back to tools list</a> |
   <a href="{{ url_for('index') }}">Back to homepage</a>
 </p>
+
 <!-- END tool_detail.html -->
 {% endblock %}

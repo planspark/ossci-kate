@@ -6,7 +6,19 @@
 <p><strong>Name:</strong> {{ person.name }}</p>
 <p><strong>Description:</strong> {{ person.description }}</p>
 <p><strong>URL:</strong> <a href="{{ person.url }}">{{ person.url }}</a></p>
+<h2>Packages:</h2>
+<ul>
+    {% for package in person.packages %}
+        <li>{{ package.tool.name }} - {{ package.tool.description }}</li>
+    {% endfor %}
+</ul>
 
+<h2>Papers:</h2>
+<ul>
+    {% for paper in person.papers %}
+        <li>{{ paper.article.title }} - {{ paper.article.description }}</li>
+    {% endfor %}
+</ul>
 <p>
   <a href="{{ url_for('persons') }}">Back to list of people</a> |
   <a href="{{ url_for('index') }}">Back to homepage</a>
