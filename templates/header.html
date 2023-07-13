@@ -1,16 +1,13 @@
 <!-- BEGIN header.html -->
 <div class="header">
-  {% if current_user.is_authenticated %}
     <div class="header-left">
-      <a href="{{ url_for('index') }}">Homepage</a>
+      <a href="{{ url_for('index') }}">Home</a>
     </div>
+    {% if current_user.is_authenticated %}
     <div class="header-right">
       You are logged in as: {{ current_user.email }} | <a href="{{ url_for('logout') }}">Log out</a>
     </div>
   {% else %}
-    <div class="header-left">
-      <a href="{{ url_for('index') }}">Homepage</a>
-    </div>
     <div class="header-right">
       <a href="{{ url_for('register') }}">Register</a> |
       <a href="{{ url_for('login') }}">Login</a>

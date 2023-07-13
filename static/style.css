@@ -54,13 +54,13 @@ body {
 /* Header */
 .header {
   background-color: #92c8f7;
-  padding: 10px;
+  padding-top: 30px;
   display: flex;
   justify-content: space-between;
 }
 
 .header-left {
-  align-self: flex-start;
+  align: center
 }
 
 .header-right {
