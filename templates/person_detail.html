@@ -16,12 +16,17 @@
     {% endfor %}
 </ul>
 
+<p>(<a href="">add package</a>)</p>
+
 <h2>Papers:</h2>
 <ul>
     {% for paper in person.papers %}
         <li>{{ paper.article.title }} - {{ paper.article.description }}</li>
     {% endfor %}
 </ul>
+
+<p>(<a href="">add paper</a>)</p>
+
 <p>
   <a href="{{ url_for('persons') }}">Back to list of people</a> |
   <a href="{{ url_for('index') }}">Back to homepage</a>

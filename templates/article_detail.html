@@ -16,12 +16,16 @@
     {% endfor %}
 </ul>
 
+<p>(<a href="">add author</a>)</p>
+
 <h2>Packages:</h2>
 <ul>
     {% for package in article.packages %}
         <li>{{ package.tool.name }} - {{ package.tool.description }}</li>
     {% endfor %}
 </ul>
+
+<p>(<a href="">add package</a>)</p>
 
 <p>
   <a href="{{ url_for('articles') }}">Back to list of research articles</a> |
