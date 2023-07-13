@@ -165,6 +165,9 @@ def logout():
 def profile():
     return render_template('profile.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.route('/tools')
 def tools():

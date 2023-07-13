@@ -2,7 +2,7 @@
 
 {% block content %}
 <!-- BEGIN tools.html -->
-  <h1>List of Tools</h1>
+  <h1>List of Packages</h1>
   <ul>
     {% for tool in tools %}
       <li><a href="{{ url_for('tool_detail', tool_id=tool.id) }}">{{ tool.name }}</a></li>
