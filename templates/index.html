@@ -7,11 +7,7 @@
 {% if not current_user.is_authenticated %}
     <p>Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to access the full functionality.</p>
 {% endif %}
-<p>Browse our inventory:</p>
-<ul>
-  <li><a href="{{ url_for('tools') }}">Tools</a></li>
-  <li><a href="{{ url_for('articles') }}">Papers</a></li>
-  <li><a href="{{ url_for('persons') }}">People</a></li>
-</ul>
+
+<iframe src="https://embed.kumu.io/de2cfe7275d63546b769d5e3532acbee" width="640" height="480" frameborder="0"></iframe>
 <!-- END index.html -->
 {% endblock %}
